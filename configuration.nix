@@ -29,6 +29,7 @@
       description = "Marc Partensky";
       extraGroups = ["wheel" "networkmanager"];
       # openssh.authorizedKeys.keys = 
+    };
   };
 
   programs.neovim = {

@@ -13,8 +13,10 @@
 
   # Enable NetworkManager for wireless networking,
   # You can configure networking with "nmtui" command.
-  networking.useDHCP = true;
-  networking.networkmanager.enable = false;
+  # networking.useDHCP = true;
+  networking.networkmanager.enable = true;
+  networking.wireless.iwd.enable = true;
+  networking.networkmanager.wifi.backend = "iwd";
 
   users.users = {
     root = {
@@ -38,6 +40,8 @@
     enable = lib.mkDefault true;
     settings = { PasswordAuthentication = lib.mkDefault false; };
   };
+
+  # services.iwd.enable = true;
 
   boot.zfs.forceImportRoot = lib.mkDefault false;
 

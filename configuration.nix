@@ -51,6 +51,15 @@
     settings = { PasswordAuthentication = lib.mkDefault true; };
   };
 
+  # kubernetes
+  networking.firewall.allowedTCPPorts = [ 6443 ];
+  services.k3s = {
+    enable = true;
+    role = "server";
+    extraFlags = toString [];
+  };
+  environment.systemPackages = [ pkgs.k3s ];
+
   boot.zfs.forceImportRoot = lib.mkDefault false;
 
   nix.settings.experimental-features = lib.mkDefault [ "nix-command" "flakes" ];

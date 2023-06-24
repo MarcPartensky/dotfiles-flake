@@ -51,8 +51,6 @@
     settings = { PasswordAuthentication = lib.mkDefault false; };
   };
 
-  # services.iwd.enable = true;
-
   boot.zfs.forceImportRoot = lib.mkDefault false;
 
   nix.settings.experimental-features = lib.mkDefault [ "nix-command" "flakes" ];

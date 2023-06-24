@@ -58,7 +58,6 @@
     role = "server";
     extraFlags = toString [];
   };
-  environment.systemPackages = [ pkgs.k3s ];
 
   boot.zfs.forceImportRoot = lib.mkDefault false;
 
@@ -73,6 +72,7 @@
 
   environment.systemPackages = builtins.attrValues {
     inherit (pkgs)
+      k3s
       mg # emacs-like editor
       jq # other programs
     ;

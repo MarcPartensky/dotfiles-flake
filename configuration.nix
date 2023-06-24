@@ -48,7 +48,7 @@
 
   services.openssh = {
     enable = lib.mkDefault true;
-    settings = { PasswordAuthentication = lib.mkDefault false; };
+    settings = { PasswordAuthentication = lib.mkDefault true; };
   };
 
   boot.zfs.forceImportRoot = lib.mkDefault false;

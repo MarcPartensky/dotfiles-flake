@@ -11,6 +11,9 @@
 
   system.stateVersion = "22.11";
 
+
+  virtualisation.docker.enable = true;
+
   # Enable NetworkManager for wireless networking,
   # You can configure networking with "nmtui" command.
   # networking.useDHCP = true;

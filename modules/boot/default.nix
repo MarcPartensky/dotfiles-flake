@@ -44,11 +44,11 @@ in {
     };
     partitionScheme = mkOption {
       default = {
-        biosBoot = "-part5";
-        efiBoot = "-part1";
-        swap = "-part4";
-        bootPool = "-part2";
-        rootPool = "-part3";
+        biosBoot = "p5";
+        efiBoot = "p1";
+        swap = "p4";
+        bootPool = "p2";
+        rootPool = "p3";
       };
       description = "Describe on disk partitions";
       type = types.attrsOf types.str;

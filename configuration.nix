@@ -17,6 +17,7 @@
   # Enable NetworkManager for wireless networking,
   # You can configure networking with "nmtui" command.
   # networking.useDHCP = true;
+  networking.hostName = "tower";
   networking.networkmanager.enable = true;
   networking.wireless.iwd.enable = true;
   networking.networkmanager.wifi.backend = "iwd";

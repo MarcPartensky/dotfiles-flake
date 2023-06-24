@@ -56,7 +56,10 @@
   services.k3s = {
     enable = true;
     role = "server";
-    extraFlags = toString [];
+    # TODO describe how to enable zfs snapshotter in containerd
+    extraFlags = toString [
+      "--container-runtime-endpoint unix:///run/containerd/containerd.sock"
+    ];
   };
 
   # kubernetes zfs support
@@ -78,11 +81,6 @@
         };
       };
   };
-  # TODO describe how to enable zfs snapshotter in containerd
-  services.k3s.extraFlags = toString [
-    "--container-runtime-endpoint unix:///run/containerd/containerd.sock"
-  ];
-
 
   boot.zfs.forceImportRoot = lib.mkDefault false;
 

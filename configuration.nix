@@ -22,6 +22,7 @@
   networking.wireless.iwd.enable = true;
   networking.networkmanager.wifi.backend = "iwd";
 
+  hardware.pulseaudio.enable = true;
   hardware.bluetooth.enable = true;
 
   users.users = {

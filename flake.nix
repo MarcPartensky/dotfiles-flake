@@ -18,10 +18,10 @@
         };
     in {
       nixosConfigurations = {
-        exampleHost = let
+        tower = let
           system = "x86_64-linux";
           pkgs = nixpkgs.legacyPackages.${system};
-        in mkHost (import ./hosts/exampleHost { inherit system pkgs; });
+        in mkHost (import ./hosts/tower { inherit system pkgs; });
       };
     };
 }

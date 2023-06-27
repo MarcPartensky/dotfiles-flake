@@ -19,6 +19,10 @@ MNT=$(mktemp -d)
 
 log() { echo -e "\n\033[1m${@}\033[0m"; }
 
+log Destroying zfs pool rpool and bpool just in case
+zpool destroy bpool
+zpool destroy rpool
+
 log Unmounting filesystems just in case
 # ---
 umount -Rl "${MNT}"

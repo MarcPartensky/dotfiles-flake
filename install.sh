@@ -150,9 +150,9 @@ zfs snapshot rpool/nixos/empty@start
 log Formatting and mounting ESP
 # ---
 for i in ${DISK}; do
- mkfs.vfat -n EFI "${i}"1
- mkdir -p "${MNT}"/boot/efis/"${i##*/}"1
- mount -t vfat -o iocharset=iso8859-1 "${i}"1 "${MNT}"/boot/efis/"${i##*/}"1
+ mkfs.vfat -n EFI "${i}"4
+ mkdir -p "${MNT}"/boot/efis/"${i##*/}"4
+ mount -t vfat -o iocharset=iso8859-1 "${i}"1 "${MNT}"/boot/efis/"${i##*/}"4
 done
 
 

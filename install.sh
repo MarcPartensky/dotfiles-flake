@@ -4,14 +4,14 @@ lsblk
 echo ""
 
 read -p "disk: " DISK
-read -p "swapsize GiB: " SWAPSIZEGIB
-read -p "reserve GiB: " RESERVE
+read -p "swapsize GiB: " SWAPSIZE
+read -p "reserve GiB: " RESERVEGIB
 read -sp "password: " POOLPASS
 
 EMAIL="marc@marcpartensky.com"
 NAME="Marc Partensky"
 
-SWAPSIZE=$((SWAPSIZEGIB * 1024))
+RESERVE=$((RESERVEGIB * 1024))
 
 MNT=$(mktemp -d)
 
@@ -39,8 +39,8 @@ partition_disk () {
 
  parted --script --align=optimal  "${disk}" -- \
      mklabel gpt \
-     mkpart swap  0MiB ${SWAPSIZE}GiB \
-     mkpart rpool $((SWAPSIZE))GiB -$((RESERVE + 100))MiB \
+     mkpart swap  0MiB ${SWAPSIZE}MiB \
+     mkpart rpool $((SWAPSIZE))MiB -$((RESERVE + 100))MiB \
      mkpart bpool -$((RESERVE + 100))MiB -$((RESERVE + 2))MiB \
      mkpart EFI -$((RESERVE + 2))MiB -$((RESERVE + 1))MiB \
      mkpart BIOS -$((RESERVE + 1))MiB -$((RESERVE))MiB \

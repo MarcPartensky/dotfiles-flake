@@ -108,9 +108,6 @@ echo $POOLPASS | zpool create \
     -O relatime=on \
     -O xattr=sa \
     -O mountpoint=/ \
-    -o feature@encryption=enabled \
-    -O encryption=on \
-    -O keyformat=passphrase \
     rpool \
    $(for i in ${DISK}; do
       printf '%s ' "${i}2";

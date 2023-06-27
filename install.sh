@@ -22,7 +22,7 @@ log() { echo -e "\n\033[1m${@}\033[0m"; }
 log Destroying zfs pool rpool and bpool just in case
 zpool import -a
 for i in ${DISK}; do
-   for zpool labelclear -f $i
+   zpool labelclear -f $i
 done
 zpool destroy bpool
 zpool destroy rpool

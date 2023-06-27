@@ -2,7 +2,7 @@
 This repo contains a minimal set of configuration needed for
 installing NixOS on a computer with ZFS as root filesystem.
 
-```
+```sh
 .gitignore
 LICENSE
 configuration.nix   <- configuration shared by all hosts

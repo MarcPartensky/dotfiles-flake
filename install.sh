@@ -41,9 +41,9 @@ partition_disk () {
      mklabel gpt \
      mkpart swap  0MiB ${SWAPSIZE}MiB \
      mkpart rpool $((SWAPSIZE))MiB -$((RESERVE + 100))MiB \
-     mkpart bpool -$((RESERVE + 100))MiB -$((RESERVE + 2))MiB \
-     mkpart EFI -$((RESERVE + 2))MiB -$((RESERVE + 1))MiB \
-     mkpart BIOS -$((RESERVE + 1))MiB -$((RESERVE))MiB \
+     mkpart bpool -$((RESERVE + 100))MiB -$((RESERVE + 3))MiB \
+     mkpart EFI -$((RESERVE + 3))MiB -$((RESERVE + 2))MiB \
+     mkpart BIOS -$((RESERVE + 2))MiB -$((RESERVE + 1))MiB \
      set 4 esp on \
      set 5 bios_grub on \
      set 5 legacy_boot on

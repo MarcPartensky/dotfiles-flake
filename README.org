@@ -18,9 +18,8 @@ modules/users/default.nix
 #+end_src text
 
 * Thanks to
-See [[https://github.com/ne9z/personal-dotfiles][my personal dotfiles repo]] for an example of how to configure
+See [[https://github.com/ne9z/personal-dotfiles][ne9z dotfiles repo]] for an example of how to configure
 servers and desktop computers in the same git repository, based on
 this template repo you are viewing now.
 
-
-[Official Tutorial](https://openzfs.github.io/openzfs-docs/Getting%20Started/NixOS/Root%20on%20ZFS.html)
+[[https://openzfs.github.io/openzfs-docs/Getting%20Started/NixOS/Root%20on%20ZFS.html]][Official Tutorial]

@@ -1,24 +1,26 @@
-* Minimal NixOS Root on ZFS configuration
+* Minimal installer for NixOS using ZFS encrypted root
 This repo contains a minimal set of configuration needed for
 installing NixOS on a computer with ZFS as root filesystem.
 
-#+begin_src text
+```
 .gitignore
 LICENSE
 configuration.nix   <- configuration shared by all hosts
 flake.lock
 flake.nix
-hosts/exampleHost/default.nix  <- per-host configuration
-hosts/exampleHost/sshUnlock.txt
+hosts/nixos/default.nix  <- per-host configuration
+hosts/nixos/sshUnlock.txt
 modules/boot/default.nix
 modules/default.nix
 modules/fileSystems/default.nix
 modules/networking/default.nix
 modules/users/default.nix
-#+end_src
+```
 
-Just enough to get you started.
-
+## Thanks to
 See [[https://github.com/ne9z/personal-dotfiles][my personal dotfiles repo]] for an example of how to configure
 servers and desktop computers in the same git repository, based on
 this template repo you are viewing now.
+
+
+[Official Tutorial](https://openzfs.github.io/openzfs-docs/Getting%20Started/NixOS/Root%20on%20ZFS.html)

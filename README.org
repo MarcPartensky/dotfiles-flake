@@ -17,7 +17,7 @@ modules/networking/default.nix
 modules/users/default.nix
 #+end_src text
 
-## Thanks to
+* Thanks to
 See [[https://github.com/ne9z/personal-dotfiles][my personal dotfiles repo]] for an example of how to configure
 servers and desktop computers in the same git repository, based on
 this template repo you are viewing now.

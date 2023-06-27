@@ -4,7 +4,7 @@ lsblk
 echo ""
 
 read -p "disk: " DISK
-read -p "swapsize GiB: " SWAPSIZE
+read -p "swapsize GiB: " SWAPSIZEGIB
 read -p "reserve GiB: " RESERVEGIB
 read -sp "password: " POOLPASS
 
@@ -12,6 +12,8 @@ EMAIL="marc@marcpartensky.com"
 NAME="Marc Partensky"
 
 RESERVE=$((RESERVEGIB * 1024))
+SWAPSIZE=$((SWAPSIZEGIB * 1024))
+
 
 MNT=$(mktemp -d)
 

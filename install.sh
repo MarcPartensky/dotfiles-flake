@@ -6,7 +6,7 @@ echo ""
 read -p "disk: " DISK
 read -p "swapsize GiB: " SWAPSIZEGIB
 read -p "reserve GiB: " RESERVE
-read -p "password: " POOLPASS
+read -sp "password: " POOLPASS
 
 EMAIL="marc@marcpartensky.com"
 NAME="Marc Partensky"

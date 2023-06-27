@@ -24,7 +24,7 @@
       # read changeHostName.txt file.
       hostName = "nixos";
       timeZone = "Europe/Paris";
-      hostId = "nixos";
+      hostId = "abcd1234";
     };
   };
 

@@ -217,7 +217,7 @@ log Installing system and apply configuration
 nixos-install \
 --root "${MNT}" \
 --no-root-passwd \
---flake "git+file://${MNT}/etc/nixos#exampleHost"
+--flake "git+file://${MNT}/etc/nixos#nixos"
 
 
 log Setuping encrypted swap. This is useful if the available memory is small

@@ -1,6 +1,6 @@
 # #
 ##
-##  per-host configuration for exampleHost
+##  per-host configuration for nixos host
 ##
 ##
 
@@ -22,9 +22,9 @@
     };
     networking = {
       # read changeHostName.txt file.
-      hostName = "exampleHost";
-      timeZone = "Europe/Berlin";
-      hostId = "abcd1234";
+      hostName = "nixos";
+      timeZone = "Europe/Paris";
+      hostId = "nixos";
     };
   };
 

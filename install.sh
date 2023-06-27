@@ -34,8 +34,8 @@ umount -Rl "${MNT}"
 
 log Enabling Nix Flakes functionality
 # ---
-# mkdir -p ~/.config/nix
-# echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 
 
 log Installing programs needed for system installation

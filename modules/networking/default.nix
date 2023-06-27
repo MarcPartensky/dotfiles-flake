@@ -7,7 +7,7 @@ in {
     hostName = mkOption {
       description = "The name of the machine.  Used by nix flake.";
       type = types.str;
-      default = "exampleHost";
+      default = "nixos";
     };
     timeZone = mkOption {
       type = types.str;

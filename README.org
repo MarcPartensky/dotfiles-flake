@@ -2,7 +2,7 @@
 This repo contains a minimal set of configuration needed for
 installing NixOS on a computer with ZFS as root filesystem.
 
-```sh
+#+begin_src text
 .gitignore
 LICENSE
 configuration.nix   <- configuration shared by all hosts
@@ -15,7 +15,7 @@ modules/default.nix
 modules/fileSystems/default.nix
 modules/networking/default.nix
 modules/users/default.nix
-```
+#+end_src text
 
 ## Thanks to
 See [[https://github.com/ne9z/personal-dotfiles][my personal dotfiles repo]] for an example of how to configure

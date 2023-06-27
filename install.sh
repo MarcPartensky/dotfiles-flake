@@ -20,7 +20,6 @@ log() { echo -e "\n\033[1m${@}\033[0m"; }
 
 log Enabling Nix Flakes functionality
 # ---
-exit 0
 # mkdir -p ~/.config/nix
 # echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 

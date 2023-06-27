@@ -20,16 +20,17 @@ MNT=$(mktemp -d)
 log() { echo -e "\n\033[1m${@}\033[0m"; }
 
 log Destroying zfs pool rpool and bpool just in case
+zpool import -a
 for i in ${DISK}; do
    for zpool labelclear -f $i
 done
 zpool destroy bpool
 zpool destroy rpool
+zpool export -a
 
 log Unmounting filesystems just in case
 # ---
 umount -Rl "${MNT}"
-zpool export -a
 
 log Enabling Nix Flakes functionality
 # ---

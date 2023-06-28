@@ -88,9 +88,6 @@ zpool create \
     -O xattr=sa \
     -O mountpoint=/boot \
     -R "${MNT}" \
-    -o feature@encryption=enabled \
-    -O encryption=on \
-    -O keyformat=passphrase \
     bpool \
     $(for i in ${DISK}; do
        printf '%s ' "${i}3";

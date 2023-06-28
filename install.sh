@@ -25,8 +25,8 @@ zpool import -fa
 for i in ${DISK}; do
    zpool labelclear -f $i
 done
-zpool destroy bpool
-zpool destroy rpool
+zpool destroy -f bpool
+zpool destroy -f rpool
 zpool export -a
 
 log Unmounting filesystems just in case

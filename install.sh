@@ -20,7 +20,7 @@ MNT=$(mktemp -d)
 log() { echo -e "\n\033[1m${@}\033[0m"; }
 
 log Destroying zfs pool rpool and bpool just in case
-zpool import -a
+zpool import -fa
 for i in ${DISK}; do
    zpool labelclear -f $i
 done
@@ -87,6 +87,9 @@ zpool create \
     -O xattr=sa \
     -O mountpoint=/boot \
     -R "${MNT}" \
+    -o feature@encryption=enabled \
+    -O encryption=on \
+    -O keyformat=passphrase \
     bpool \
     $(for i in ${DISK}; do
        printf '%s ' "${i}3";
@@ -108,6 +111,9 @@ echo $POOLPASS | zpool create \
     -O relatime=on \
     -O xattr=sa \
     -O mountpoint=/ \
+    -o feature@encryption=enabled \
+    -O encryption=on \
+    -O keyformat=passphrase \
     rpool \
    $(for i in ${DISK}; do
       printf '%s ' "${i}2";

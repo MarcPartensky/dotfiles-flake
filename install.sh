@@ -20,6 +20,7 @@ MNT=$(mktemp -d)
 log() { echo -e "\n\033[1m${@}\033[0m"; }
 
 log Destroying zfs pool rpool and bpool just in case
+swapoff -a
 zpool import -fa
 for i in ${DISK}; do
    zpool labelclear -f $i

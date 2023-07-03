@@ -104,6 +104,7 @@
       jq # other programs
       neovim
       stow
+      make
     ;
   };
 }

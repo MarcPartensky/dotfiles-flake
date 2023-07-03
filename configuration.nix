@@ -104,7 +104,7 @@
       jq # other programs
       neovim
       stow
-      make
+      coreutils
     ;
   };
 }

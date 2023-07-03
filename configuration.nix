@@ -102,6 +102,8 @@
       k3s
       mg # emacs-like editor
       jq # other programs
+      neovim
+      stow
     ;
   };
 }

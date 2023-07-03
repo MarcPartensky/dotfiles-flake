@@ -105,6 +105,7 @@
       neovim
       stow
       coreutils
+      gnumake
     ;
   };
 }

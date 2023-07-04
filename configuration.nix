@@ -114,6 +114,7 @@
       gnumake
       bat
       gnupg
+      home-manager
     ;
   };
 }

@@ -113,6 +113,7 @@
       coreutils
       gnumake
       bat
+      gnupg
     ;
   };
 }

@@ -109,6 +109,7 @@
       stow
       coreutils
       gnumake
+      bat
     ;
   };
 }

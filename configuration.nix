@@ -115,6 +115,7 @@
       bat
       gnupg
       home-manager
+      kubectl
     ;
   };
 }

@@ -36,7 +36,7 @@
       isNormalUser = true;
       home = "/home/marc";
       description = "Marc Partensky";
-      extraGroups = ["wheel" "networkmanager"];
+      extraGroups = ["wheel" "networkmanager" "docker"];
       # openssh.authorizedKeys.keys = 
       shell = pkgs.zsh;
       initialHashedPassword = "$6$0QAYnBqAJtqB12p3$2lb7rAS2sYw49GUJt0L0bAEpZJSv4HZARQjlbYPhexSmeRB71IRMBzXjf3b4rX6fuDxOuDLydP/Kni9uraS5j/";

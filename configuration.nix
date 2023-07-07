@@ -143,7 +143,6 @@ in
       bat
       gnupg
       home-manager
-      kubectl
       htop
       kompose
       kubectl

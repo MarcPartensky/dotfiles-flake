@@ -1,4 +1,10 @@
-{ my-config, zfs-root, inputs, pkgs, lib, ... }: {
+{ my-config, zfs-root, inputs, pkgs, lib, ... }: 
+let 
+  kubeMasterIP = "10.1.1.2";
+  kubeMasterHostname = "api.kube";
+  kubeMasterAPIServerPort = 6443;
+in
+{
   # load module config to top-level configuration
   inherit my-config zfs-root;
 
@@ -92,39 +98,32 @@
   };
 
   # kubernetes support
-  let
-    kubeMasterIP = "10.1.1.2";
-    kubeMasterHostname = "api.kube";
-    kubeMasterAPIServerPort = 6443;
-  in
-  {
-    # resolve master hostname
-    networking.extraHosts = "${kubeMasterIP} ${kubeMasterHostname}";
-  
-    # packages for administration tasks
-    environment.systemPackages = with pkgs; [
-      kompose
-      kubectl
-      kubernetes
-    ];
-  
-    services.kubernetes = {
-      roles = ["master" "node"];
-      masterAddress = kubeMasterHostname;
-      apiserverAddress = "https://${kubeMasterHostname}:${toString kubeMasterAPIServerPort}";
-      easyCerts = true;
-      apiserver = {
-        securePort = kubeMasterAPIServerPort;
-        advertiseAddress = kubeMasterIP;
-      };
-  
-      # use coredns
-      addons.dns.enable = true;
-  
-      # needed if you use swap
-      kubelet.extraOpts = "--fail-swap-on=false";
+  # resolve master hostname
+  networking.extraHosts = "${kubeMasterIP} ${kubeMasterHostname}";
+
+  # packages for administration tasks
+  environment.systemPackages = with pkgs; [
+    kompose
+    kubectl
+    kubernetes
+  ];
+
+  services.kubernetes = {
+    roles = ["master" "node"];
+    masterAddress = kubeMasterHostname;
+    apiserverAddress = "https://${kubeMasterHostname}:${toString kubeMasterAPIServerPort}";
+    easyCerts = true;
+    apiserver = {
+      securePort = kubeMasterAPIServerPort;
+      advertiseAddress = kubeMasterIP;
     };
-  }
+
+    # use coredns
+    addons.dns.enable = true;
+
+    # needed if you use swap
+    kubelet.extraOpts = "--fail-swap-on=false";
+  };
 
   boot.zfs.forceImportRoot = lib.mkDefault false;
 

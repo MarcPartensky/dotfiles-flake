@@ -68,56 +68,56 @@ in
 
   # kubernetes https://nixos.wiki/wiki/K3s
   networking.firewall.allowedTCPPorts = [ 6443 ];
-  services.k3s = {
-    enable = true;
-    role = "server";
-    # TODO describe how to enable zfs snapshotter in containerd
-    extraFlags = toString [
-      "--container-runtime-endpoint unix:///run/containerd/containerd.sock"
-    ];
-  };
+  # services.k3s = {
+  #   enable = true;
+  #   role = "server";
+  #   # TODO describe how to enable zfs snapshotter in containerd
+  #   extraFlags = toString [
+  #     "--container-runtime-endpoint unix:///run/containerd/containerd.sock"
+  #   ];
+  # };
 
   # kubernetes zfs support
-  virtualisation.containerd = {
-    enable = true;
-    settings =
-      let
-        fullCNIPlugins = pkgs.buildEnv {
-          name = "full-cni";
-          paths = with pkgs;[
-            cni-plugins
-            cni-plugin-flannel
-          ];
-        };
-      in {
-        plugins."io.containerd.grpc.v1.cri".cni = {
-          bin_dir = "${fullCNIPlugins}/bin";
-          conf_dir = "/var/lib/rancher/k3s/agent/etc/cni/net.d/";
-        };
-      };
-  };
+  # virtualisation.containerd = {
+  #   enable = true;
+  #   settings =
+  #     let
+  #       fullCNIPlugins = pkgs.buildEnv {
+  #         name = "full-cni";
+  #         paths = with pkgs;[
+  #           cni-plugins
+  #           cni-plugin-flannel
+  #         ];
+  #       };
+  #     in {
+  #       plugins."io.containerd.grpc.v1.cri".cni = {
+  #         bin_dir = "${fullCNIPlugins}/bin";
+  #         conf_dir = "/var/lib/rancher/k3s/agent/etc/cni/net.d/";
+  #       };
+  #     };
+  # };
 
   # kubernetes support
   # resolve master hostname
-  networking.extraHosts = "${kubeMasterIP} ${kubeMasterHostname}";
+  # networking.extraHosts = "${kubeMasterIP} ${kubeMasterHostname}";
 
 
-  services.kubernetes = {
-    roles = ["master" "node"];
-    masterAddress = kubeMasterHostname;
-    apiserverAddress = "https://${kubeMasterHostname}:${toString kubeMasterAPIServerPort}";
-    easyCerts = true;
-    apiserver = {
-      securePort = kubeMasterAPIServerPort;
-      advertiseAddress = kubeMasterIP;
-    };
+  # services.kubernetes = {
+  #   roles = ["master" "node"];
+  #   masterAddress = kubeMasterHostname;
+  #   apiserverAddress = "https://${kubeMasterHostname}:${toString kubeMasterAPIServerPort}";
+  #   easyCerts = true;
+  #   apiserver = {
+  #     securePort = kubeMasterAPIServerPort;
+  #     advertiseAddress = kubeMasterIP;
+  #   };
 
-    # use coredns
-    addons.dns.enable = true;
+  #   # use coredns
+  #   addons.dns.enable = true;
 
-    # needed if you use swap
-    kubelet.extraOpts = "--fail-swap-on=false";
-  };
+  #   # needed if you use swap
+  #   kubelet.extraOpts = "--fail-swap-on=false";
+  # };
 
   boot.zfs.forceImportRoot = lib.mkDefault false;
 
@@ -133,7 +133,7 @@ in
 
   environment.systemPackages = builtins.attrValues {
     inherit (pkgs)
-      k3s
+      # k3s
       mg # emacs-like editor
       jq # other programs
       neovim

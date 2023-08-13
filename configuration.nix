@@ -134,6 +134,7 @@ in
   environment.systemPackages = builtins.attrValues {
     inherit (pkgs)
       k3s
+      autossh
       mg # emacs-like editor
       jq # other programs
       neovim

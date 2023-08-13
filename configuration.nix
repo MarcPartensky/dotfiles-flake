@@ -131,6 +131,13 @@ in
     sudo.enable = lib.mkDefault false;
   };
 
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
+
   systemd.services.tunneltower = {
       enable = true;
       description = "Connect to my tower remotely";

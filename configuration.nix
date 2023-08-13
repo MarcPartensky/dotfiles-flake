@@ -133,7 +133,7 @@ in
 
   environment.systemPackages = builtins.attrValues {
     inherit (pkgs)
-      # k3s
+      k3s
       mg # emacs-like editor
       jq # other programs
       neovim

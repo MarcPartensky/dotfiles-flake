@@ -168,6 +168,7 @@ in
       kubectl
       kubernetes
       killall
+      seatd
     ;
   };
 }

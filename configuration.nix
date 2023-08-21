@@ -154,7 +154,6 @@ in
     inherit (pkgs)
       k3s
       autossh
-      mg # emacs-like editor
       jq # other programs
       neovim
       stow

@@ -170,7 +170,6 @@ in
       killall
       seatd
       ly
-      alacritty
     ;
   };
 }

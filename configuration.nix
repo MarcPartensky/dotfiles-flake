@@ -169,6 +169,7 @@ in
       kubernetes
       killall
       seatd
+      ly
     ;
   };
 }

@@ -30,6 +30,7 @@ in
 
   hardware.pulseaudio.enable = true;
   hardware.bluetooth.enable = true;
+  wayland.windowManager.hyprland.enable = true;
   programs.hyprland.enable = true;
 
   users.users = {

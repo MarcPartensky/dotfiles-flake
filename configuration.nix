@@ -30,6 +30,7 @@ in
 
   hardware.pulseaudio.enable = true;
   hardware.bluetooth.enable = true;
+  programs.hyprland.enable = true;
 
   users.users = {
     root = {

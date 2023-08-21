@@ -28,7 +28,7 @@ in
   networking.wireless.iwd.enable = true;
   networking.networkmanager.wifi.backend = "iwd";
 
-  systemd.services.gdm.enable = false;
+  services.xserver.displayManager.gdm.enable = true;
   hardware.pulseaudio.enable = true;
   hardware.bluetooth.enable = true;
   programs.hyprland.enable = true;

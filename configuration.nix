@@ -167,6 +167,7 @@ in
       kompose
       kubectl
       kubernetes
+      killall
     ;
   };
 }

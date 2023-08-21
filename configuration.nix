@@ -28,6 +28,7 @@ in
   networking.wireless.iwd.enable = true;
   networking.networkmanager.wifi.backend = "iwd";
 
+  services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   hardware.pulseaudio.enable = true;
   hardware.bluetooth.enable = true;
@@ -170,7 +171,6 @@ in
       kubernetes
       killall
       seatd
-      gnome.gdm
     ;
   };
 

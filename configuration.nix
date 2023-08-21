@@ -170,6 +170,7 @@ in
       kubernetes
       killall
       seatd
+      gnome.gdm
     ;
   };
 

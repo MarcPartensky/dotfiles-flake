@@ -70,7 +70,7 @@ in
   };
 
   # kubernetes https://nixos.wiki/wiki/K3s
-  networking.firewall.allowedTCPPorts = [ 6443 ];
+  networking.firewall.allowedTCPPorts = [ 6443 5900 ];
   # services.k3s = {
   #   enable = true;
   #   role = "server";

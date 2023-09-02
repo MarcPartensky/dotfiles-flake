@@ -171,6 +171,7 @@ in
       kubernetes
       killall
       seatd
+      mcfly
     ;
   };
 

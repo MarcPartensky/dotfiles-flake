@@ -1,4 +1,6 @@
-{ my-config, zfs-root, inputs, pkgs, lib, ... }: 
+{
+    my-config, zfs-root, inputs, pkgs, lib, ... 
+}: 
 let 
   kubeMasterIP = "10.1.1.2";
   kubeMasterHostname = "api.kube";
@@ -16,7 +18,16 @@ in
     throw "refuse to build: git tree is dirty";
 
   system.stateVersion = "22.11";
-
+ 
+  system.activationScripts = {
+    enableLingering = ''
+      # remove all existing lingering users
+      rm -r /var/lib/systemd/linger
+      mkdir /var/lib/systemd/linger
+      # enable for the subset of declared users
+      touch /var/lib/systemd/linger/marc
+    '';
+  };
 
   virtualisation.docker.enable = true;
 

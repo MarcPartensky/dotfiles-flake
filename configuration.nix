@@ -159,7 +159,8 @@ in
           # Type = "simple";
       };
       serviceConfig = {
-          ExecStart = "${pkgs.autossh}/bin/autossh -M 0 \
+          ExecStart = ''
+          ${pkgs.autossh}/bin/autossh -M 0 \
           -o ServerAliveInterval=30 \
           -o ServerAliveCountMax=3 \
           -o PubkeyAuthentication=yes \
@@ -167,7 +168,8 @@ in
           -NR localhost:42071:localhost:22 \
           -p 42069 \
           -i ~/.ssh/id_rsa \
-          marc@207.180.235.56";
+          marc@207.180.235.56
+          '';
       };
       wantedBy = [ "multi-user.target" ];
   };

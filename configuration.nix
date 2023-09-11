@@ -45,6 +45,8 @@ in
   hardware.bluetooth.enable = true;
   programs.hyprland.enable = true;
 
+  nixpkgs.config.allowUnfree = true;
+
   programs.firejail = {
     enable = true;
     wrappedBinaries = {
@@ -222,17 +224,9 @@ in
       killall
       seatd
       mcfly
-      discord
-      spotify
     ;
   };
 
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [
-      # Add additional package names here
-      "spotify"
-      "discord"
-    ];
 
   i18n.defaultLocale = "fr_FR.UTF-8";
   i18n.extraLocaleSettings = {

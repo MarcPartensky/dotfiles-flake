@@ -45,6 +45,8 @@ in
   hardware.bluetooth.enable = true;
   programs.hyprland.enable = true;
 
+  nixpkgs.config.allowUnfree = true;
+
   users.users = {
     root = {
       isNormalUser = false;

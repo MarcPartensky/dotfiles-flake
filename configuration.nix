@@ -44,8 +44,7 @@ in
   hardware.pulseaudio.enable = true;
   hardware.bluetooth.enable = true;
   programs.hyprland.enable = true;
-
-  nixpkgs.config.allowUnfree = true;
+  programs.firejail.enable = true;
 
   users.users = {
     root = {

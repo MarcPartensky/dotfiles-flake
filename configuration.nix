@@ -39,7 +39,7 @@ in
   networking.wireless.iwd.enable = true;
   networking.networkmanager.wifi.backend = "iwd";
 
-  # services.xserver.enable = true;
+  services.xserver.enable = true;
   services.xserver.displayManager.lightdm = {
 	enable = true;
 	extraConfig = ''

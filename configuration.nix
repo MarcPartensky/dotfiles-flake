@@ -40,12 +40,7 @@ in
   networking.networkmanager.wifi.backend = "iwd";
 
   services.xserver.enable = true;
-  services.xserver.displayManager.lightdm = {
-	enable = true;
-	extraConfig = ''
-		logind-check-graphical=true 
-	'';
-};
+  services.xserver.displayManager.gdm.enable = true;
 
   hardware.pulseaudio.enable = true;
   hardware.bluetooth.enable = true;

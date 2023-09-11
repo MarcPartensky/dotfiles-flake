@@ -225,6 +225,13 @@ in
     ;
   };
 
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) [
+      # Add additional package names here
+      "spotify"
+      "discord"
+    ];
+
   i18n.defaultLocale = "fr_FR.UTF-8";
   i18n.extraLocaleSettings = {
       LC_ADDRESS = "fr_FR.UTF-8";

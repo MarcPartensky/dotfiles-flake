@@ -207,7 +207,7 @@ in
       LC_PAPER = "fr_FR.UTF-8";
       LC_TELEPHONE = "fr_FR.UTF-8";
       LC_TIME = "fr_FR.UTF-8";
-  }
+  };
 
   environment.sessionVariables = {
     # POLKIT_AUTH_AGENT = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";

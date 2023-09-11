@@ -222,6 +222,8 @@ in
       killall
       seatd
       mcfly
+      discord
+      spotify
     ;
   };
 

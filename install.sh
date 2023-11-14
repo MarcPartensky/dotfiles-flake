@@ -134,11 +134,7 @@ echo $POOLPASS | zpool create \
     -O keyformat=passphrase \
     -m / \
     rpool \
-<<<<<<< HEAD
-   $(for i in ${DISK}; do
-=======
    $(for i in $DISK; do
->>>>>>> custom
       printf '%s ' "${i}p2";
      done)
 

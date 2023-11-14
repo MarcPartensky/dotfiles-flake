@@ -109,7 +109,7 @@ createbpool="zpool create \
     -R $MNT \
     bpool \
     `for i in $DISK; do
-       printf '%s ' ${i}3
+       printf '%s ' ${i}p3
      done`"
 echo $createbpool
 eval $createbpool

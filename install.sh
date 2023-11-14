@@ -1,5 +1,7 @@
 #!/bin/env bash
 
+log() { echo -e "\n\033[1m${@}\033[0m"; }
+
 log Loading zfs module first
 sudo modprobe zfs
 
@@ -19,8 +21,6 @@ SWAPSIZE=$((SWAPSIZEGIB * 1024))
 
 
 MNT=$(mktemp -d)
-
-log() { echo -e "\n\033[1m${@}\033[0m"; }
 
 log Destroying zfs pool rpool and bpool just in case
 swapoff -a

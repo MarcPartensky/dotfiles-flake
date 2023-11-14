@@ -2,8 +2,14 @@
 
 log() { echo -e "\n\033[1m${@}\033[0m"; }
 
+log Switching to root
+sudo su || exit 1
+
+log Checking connectivity
+curl -s google.com > /dev/null || exit 1
+
 log Loading zfs module first
-sudo modprobe zfs
+modprobe zfs || exit 1
 
 lsblk
 echo ""

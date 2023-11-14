@@ -1,5 +1,8 @@
 #!/bin/env bash
 
+log Loading zfs module first
+sudo modprobe zfs
+
 lsblk
 echo ""
 

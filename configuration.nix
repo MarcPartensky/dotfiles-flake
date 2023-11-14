@@ -1,16 +1,8 @@
-{ my-config, zfs-root, inputs, pkgs, lib, ... }: {
-  # load module config to top-level configuration
-  inherit my-config zfs-root;
+# configuration in this file is shared by all hosts
 
-  # Let 'nixos-version --json' know about the Git revision
-  # of this flake.
-  system.configurationRevision = if (inputs.self ? rev) then
-    inputs.self.rev
-  else
-    throw "refuse to build: git tree is dirty";
-
-  system.stateVersion = "22.11";
-
+{ pkgs, pkgs-unstable, inputs, ... }:
+let inherit (inputs) self;
+in {
   # Enable NetworkManager for wireless networking,
   # You can configure networking with "nmtui" command.
   networking.useDHCP = true;
@@ -23,31 +15,48 @@
     };
   };
 
+  ## enable GNOME desktop.
+  ## You need to configure a normal, non-root user.
+  # services.xserver = {
+  #  enable = true;
+  #  desktopManager.gnome.enable = true;
+  #  displayManager.gdm.enable = true;
+  # };
+
+  ## enable ZFS auto snapshot on datasets
+  ## You need to set the auto snapshot property to "true"
+  ## on datasets for this to work, such as
+  # zfs set com.sun:auto-snapshot=true rpool/nixos/home
+  services.zfs = {
+    autoSnapshot = {
+      enable = false;
+      flags = "-k -p --utc";
+      monthly = 48;
+    };
+  };
+
   programs.neovim = {
     enable = true;
     viAlias = true;
     vimAlias = true;
   };
 
-  imports = [
-    "${inputs.nixpkgs}/nixos/modules/installer/scan/not-detected.nix"
-    # "${inputs.nixpkgs}/nixos/modules/profiles/qemu-guest.nix"
-  ];
-
   services.openssh = {
-    enable = lib.mkDefault true;
-    settings = { PasswordAuthentication = lib.mkDefault false; };
+    enable = true;
+    settings = { PasswordAuthentication = false; };
   };
 
-  boot.zfs.forceImportRoot = lib.mkDefault false;
+  boot.zfs.forceImportRoot = false;
 
-  nix.settings.experimental-features = lib.mkDefault [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  boot.initrd.systemd.enable = true;
 
   programs.git.enable = true;
 
   security = {
-    doas.enable = lib.mkDefault true;
-    sudo.enable = lib.mkDefault false;
+    doas.enable = true;
+    sudo.enable = false;
   };
 
   environment.systemPackages = builtins.attrValues {
@@ -55,5 +64,27 @@
       mg # emacs-like editor
       jq # other programs
     ;
+    # By default, the system will only use packages from the
+    # stable channel. i.e.
+    # inherit (pkg) my-favorite-stable-package;
+    # You can selectively install packages
+    # from the unstable channel. Such as
+    # inherit (pkgs-unstable) my-favorite-unstable-package;
+    # You can also add more
+    # channels to pin package version.
   };
+
+  # Safety mechanism: refuse to build unless everything is
+  # tracked by git
+  system.configurationRevision = if (self ? rev) then
+    self.rev
+  else
+    throw "refuse to build: git tree is dirty";
+
+  system.stateVersion = "23.05";
+
+  # let nix commands follow system nixpkgs revision
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
+  # you can then test any package in a nix shell, such as
+  # $ nix shell nixpkgs#neovim
 }

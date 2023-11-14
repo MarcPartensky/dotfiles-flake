@@ -41,7 +41,7 @@ in {
     };
   }) cfg.bindmounts ++ map (esp: {
     "/boot/efis/${esp}" = {
-      device = "${config.zfs-root.boot.devNodes}/${esp}";
+      device = "${config.zfs-root.boot.devNodes}${esp}";
       fsType = "vfat";
       options = [
         "x-systemd.idle-timeout=1min"
@@ -54,7 +54,7 @@ in {
     };
   }) cfg.efiSystemPartitions);
   config.swapDevices = mkDefault (map (swap: {
-    device = "${config.zfs-root.boot.devNodes}/${swap}";
+    device = "${config.zfs-root.boot.devNodes}${swap}";
     discardPolicy = mkDefault "both";
     randomEncryption = {
       enable = true;

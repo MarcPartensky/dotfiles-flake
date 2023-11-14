@@ -1,45 +1,39 @@
 How to set hostname for a host.
 
-This repo is structured in a way that allows managing multiple hosts
-in a single repo.  As a consequence of this, hostname appears in
-several different places and should be updated together if needed.
+You need to change the host name in three different places.
 
-The entry point of this repo is ``flake.nix'' file, which takes a
-revision of the nixpkgs as input then gives an attribute set (attrset)
-as output:
+Place 1.
 
-  {
-    nixosConfigurations = {
-      exampleHost = { ... };
-      host2 = { ... };
-      host3 = { ... };
-      ...
-    };
-  }
+./flake.nix
 
+Change
 
-The hostname specified here inside nixosConfigurations attrset is used
-when ``nix command'' is invoked, as in
+    exampleHost = mkHost "exampleHost" "x86_64-linux";
 
-  nixos-install --flake ./#exampleHost
+to
 
-The hostname also appears in the filesystem path of the per-host
-configuration file:
+    myHost = mkHost "myHost" "x86_64-linux";
 
-  hosts/exampleHost/default.nix
-  hosts/host2/default.nix
-  ...
+Place 2.
 
-Finally, the hostname is specified in the zfs-boot.networking.hostName
-option inside per-host configuration file at
-hosts/exampleHost/default.nix:
+Move directory
 
-  zfs-boot.networking.hostName = "exampleHost";
+    ./hosts/exampleHost
 
-If the value of this option is identical to the name of
-nixosConfigurations.<hostname> attrset, all subsequent invocations of
-``nix command'' will default to this hostname, i.e. the command:
+to
 
-  nixos-rebuild boot
+    ./hosts/myHost
 
-will automatically append ``#hostName'' when evaluating the flake.
+Place 3.
+
+./hosts/exampleHost/default.nix
+
+Change
+
+  networking.hostName = "exampleHost";
+
+to
+
+  networking.hostName = "myHost";
+
+End.

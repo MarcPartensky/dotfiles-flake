@@ -1,37 +1,24 @@
-# #
-##
-##  per-host configuration for nixos host
-##
-##
-
-{ system, pkgs, ... }: {
-  inherit pkgs system;
+{ config, pkgs, lib, inputs, modulesPath, ... }: {
   zfs-root = {
     boot = {
       devNodes = "/dev/disk/by-id/";
       bootDevices = [ "bootDevices_placeholder" ];
-      immutable = false;
-      availableKernelModules = [ "kernelModules_placeholder" ];
+      immutable.enable = false;
       removableEfi = true;
-      kernelParams = [ ];
-      sshUnlock = {
-        # read sshUnlock.txt file.
-        enable = false;
-        authorizedKeys = [ ];
-      };
-    };
-    networking = {
-      # read changeHostName.txt file.
-      hostName = "nixos";
-      timeZone = "Europe/Paris";
-      hostId = "abcd1234";
+      luks.enable = True;
     };
   };
+  boot.initrd.availableKernelModules = [ "kernelModules_placeholder" ];
+  boot.kernelParams = [ ];
+  networking.hostId = "nixos";
+  # read changeHostName.txt file.
+  networking.hostName = "laptop";
+  time.timeZone = "Europe/Paris";
 
-  # To add more options to per-host configuration, you can create a
-  # custom configuration module, then add it here.
-  my-config = {
-    # Enable custom gnome desktop on exampleHost
-    template.desktop.gnome.enable = false;
-  };
+  # import preconfigured profiles
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+    # (modulesPath + "/profiles/hardened.nix")
+    # (modulesPath + "/profiles/qemu-guest.nix")
+  ];
 }

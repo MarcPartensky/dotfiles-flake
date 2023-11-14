@@ -1,27 +1,61 @@
 {
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
-  ## after reboot, you can track rolling release by using
-  #inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+  description = "Barebones NixOS on ZFS config";
 
-  outputs = { self, nixpkgs }@inputs:
+  inputs = {
+    nixpkgs.url = "nixpkgs/nixos-23.05";
+    nixpkgs-unstable.url = "nixpkgs/master";
+    home-manager = {
+      url = "github:nix-community/home-manager/release-23.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager }@inputs:
     let
-      lib = nixpkgs.lib;
-      mkHost = { my-config, zfs-root, pkgs, system, ... }:
-        lib.nixosSystem {
-          inherit system;
+      mkHost = hostName: system:
+        nixpkgs.lib.nixosSystem {
+          pkgs = import nixpkgs {
+            inherit system;
+            # settings to nixpkgs goes to here
+            # nixpkgs.pkgs.zathura.useMupdf = true;
+            # nixpkgs.config.allowUnfree = false;
+          };
+
+          specialArgs = {
+            # By default, the system will only use packages from the
+            # stable channel.  You can selectively install packages
+            # from the unstable channel.  You can also add more
+            # channels to pin package version.
+            pkgs-unstable = import nixpkgs-unstable {
+              inherit system;
+              # settings to nixpkgs-unstable goes to here
+            };
+
+            # make all inputs availabe in other nix files
+            inherit inputs;
+          };
+
           modules = [
+            # Root on ZFS related configuration
             ./modules
-            (import ./configuration.nix {
-              inherit my-config zfs-root inputs pkgs lib;
-            })
+
+            # Configuration shared by all hosts
+            ./configuration.nix
+
+            # Configuration per host
+            ./hosts/${hostName}
+
+            # home-manager
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+            }
           ];
         };
     in {
       nixosConfigurations = {
-        nixos = let
-          system = "x86_64-linux";
-          pkgs = nixpkgs.legacyPackages.${system};
-        in mkHost (import ./hosts/nixos { inherit system pkgs; });
+        laptop = mkHost "laptop" "x86_64-linux";
       };
     };
 }

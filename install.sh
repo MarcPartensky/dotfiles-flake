@@ -192,7 +192,7 @@ git -C "${MNT}"/etc/nixos/ init -b master
 git -C "${MNT}"/etc/nixos/ add "${MNT}"/etc/nixos/
 git -C "${MNT}"/etc/nixos config user.email $EMAIL
 git -C "${MNT}"/etc/nixos config user.name $NAME
-git -C "${MNT}"/etc/nixos commit -asm 'initial commit'
+git -C "${MNT}"/etc/nixos commit -nasm 'initial commit'
 
 
 log Customizing configuration to your hardware

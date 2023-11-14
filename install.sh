@@ -20,8 +20,8 @@ lsblk
 echo ""
 
 # read -p "disk: " DISK
-disk=`lsblk | grep disk | grep -v SWAP | awk '{print $1}' | fzf`
-disk=`echo /dev/$disk`
+DISK=`lsblk | grep disk | grep -v SWAP | awk '{print $1}' | fzf`
+DISK=`echo /dev/$DISK`
 log $disk
 read -p "swapsize GiB: " SWAPSIZEGIB
 read -p "reserve GiB: " RESERVEGIB
@@ -66,10 +66,10 @@ if ! command -v partprobe;  then nix-env -f '<nixpkgs>' -iA parted; fi
 log Partition the disks
 # ---
 partition_disk () {
- local disk="${1}"
- blkdiscard -f "${disk}" || true
+ local disk=$1
+ blkdiscard -f $disk || true
 
- parted --script --align=optimal  "${disk}" -- \
+ parted --script --align=optimal  $disk -- \
      mklabel gpt \
      mkpart swap  1MiB $((SWAPSIZE + 1))MiB \
      mkpart rpool $((SWAPSIZE + 1))MiB -$((RESERVE + 100))MiB \
@@ -80,19 +80,21 @@ partition_disk () {
      set 5 bios_grub on \
      set 5 legacy_boot on
 
- partprobe "${disk}"
+ partprobe $disk
  udevadm settle
 }
 
-for i in ${DISK}; do
-   partition_disk "${i}"
+for i in $DISK; do
+   partition_disk $i
 done
+
+log disk $DISK
 
 
 log Creating boot pool
 # ---
 # shellcheck disable=SC2046
-zpool create \
+createbpool="zpool create \
     -o compatibility=grub2 \
     -o ashift=12 \
     -o autotrim=on \
@@ -104,11 +106,13 @@ zpool create \
     -O relatime=on \
     -O xattr=sa \
     -m /boot \
-    -R "${MNT}" \
+    -R $MNT \
     bpool \
-    $(for i in ${DISK}; do
-       printf '%s ' "${i}3";
-      done)
+    `for i in $DISK; do
+       printf '%s ' ${i}p3
+     done`"
+echo $createbpool
+eval $createbpool
 
 
 log Creating root pool
@@ -117,7 +121,7 @@ log Creating root pool
 echo $POOLPASS | zpool create \
     -o ashift=12 \
     -o autotrim=on \
-    -R "${MNT}" \
+    -R $MNT \
     -O acltype=posixacl \
     -O canmount=off \
     -O compression=zstd \
@@ -130,8 +134,13 @@ echo $POOLPASS | zpool create \
     -O keyformat=passphrase \
     -m / \
     rpool \
+<<<<<<< Updated upstream
    $(for i in ${DISK}; do
       printf '%s ' "${i}2";
+=======
+   $(for i in $DISK; do
+      printf '%s ' "${i}p2";
+>>>>>>> Stashed changes
      done)
 
 

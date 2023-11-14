@@ -15,6 +15,7 @@ curl -s google.com > /dev/null || exit 1
 log Loading zfs module first
 modprobe zfs || exit 1
 
+echo ""
 lsblk
 echo ""
 

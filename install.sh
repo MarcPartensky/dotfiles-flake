@@ -103,7 +103,8 @@ zpool create \
     -O normalization=formD \
     -O relatime=on \
     -O xattr=sa \
-    -O mountpoint=/boot \
+    # -O mountpoint=/boot \
+    -m /boot \
     -R "${MNT}" \
     bpool \
     $(for i in ${DISK}; do
@@ -125,10 +126,10 @@ echo $POOLPASS | zpool create \
     -O normalization=formD \
     -O relatime=on \
     -O xattr=sa \
-    -O mountpoint=/ \
     -o feature@encryption=enabled \
     -O encryption=on \
     -O keyformat=passphrase \
+    -m / \
     rpool \
    $(for i in ${DISK}; do
       printf '%s ' "${i}p2";

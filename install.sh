@@ -185,14 +185,14 @@ log Cloning template flake configuration
 # ---
 mkdir -p "${MNT}"/etc
 git clone --depth 1 --branch custom \
-  https://github.com/marcpartensky/dotfiles-flake.git "${MNT}"/etc/nixos
+  https://github.com/marcpartensky/nixos-zfs-installer.git "${MNT}"/etc/nixos
 
 rm -rf "${MNT}"/etc/nixos/.git
 git -C "${MNT}"/etc/nixos/ init -b master
 git -C "${MNT}"/etc/nixos/ add "${MNT}"/etc/nixos/
 git -C "${MNT}"/etc/nixos config user.email $EMAIL
 git -C "${MNT}"/etc/nixos config user.name $NAME
-git -C "${MNT}"/etc/nixos commit -asm 'initial commit'
+git -C "${MNT}"/etc/nixos commit -nasm 'initial commit'
 
 
 log Customizing configuration to your hardware

@@ -19,6 +19,9 @@ MNT=$(mktemp -d)
 
 log() { echo -e "\n\033[1m${@}\033[0m"; }
 
+log Loading zfs module
+sudo modprobe zfs
+
 log Destroying zfs pool rpool and bpool just in case
 swapoff -a
 zpool import -fa

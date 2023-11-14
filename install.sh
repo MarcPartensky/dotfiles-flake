@@ -220,7 +220,7 @@ sed -i "s|\"x86_64-linux\"|\"$(uname -m || true)-linux\"|g" \
 
 cp "$(command -v nixos-generate-config || true)" ./nixos-generate-config
 
-chmod a+rw ./nixos-generate-config
+chmod a+rwx ./nixos-generate-config
 
 # shellcheck disable=SC2016
 echo 'print STDOUT $initrdAvailableKernelModules' >> ./nixos-generate-config

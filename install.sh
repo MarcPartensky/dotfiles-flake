@@ -19,7 +19,10 @@ echo ""
 lsblk
 echo ""
 
-read -p "disk: " DISK
+# read -p "disk: " DISK
+disk=`lsblk | grep disk | grep -v SWAP | awk '{print $1}' | fzf`
+disk=`echo /dev/$disk`
+log $disk
 read -p "swapsize GiB: " SWAPSIZEGIB
 read -p "reserve GiB: " RESERVEGIB
 read -sp "password: " POOLPASS

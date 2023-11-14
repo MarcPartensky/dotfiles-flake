@@ -134,13 +134,8 @@ echo $POOLPASS | zpool create \
     -O keyformat=passphrase \
     -m / \
     rpool \
-<<<<<<< Updated upstream
-   $(for i in ${DISK}; do
-      printf '%s ' "${i}2";
-=======
    $(for i in $DISK; do
       printf '%s ' "${i}p2";
->>>>>>> Stashed changes
      done)
 
 

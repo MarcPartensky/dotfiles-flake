@@ -1,1 +1,2 @@
 print STDOUT $initrdAvailableKernelModules
+print STDOUT $initrdAvailableKernelModules

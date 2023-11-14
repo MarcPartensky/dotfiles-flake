@@ -185,7 +185,7 @@ log Cloning template flake configuration
 # ---
 mkdir -p "${MNT}"/etc
 git clone --depth 1 --branch custom \
-  https://github.com/marcpartensky/dotfiles-flake.git "${MNT}"/etc/nixos
+  https://github.com/marcpartensky/nixos-zfs-installer.git "${MNT}"/etc/nixos
 
 rm -rf "${MNT}"/etc/nixos/.git
 git -C "${MNT}"/etc/nixos/ init -b master

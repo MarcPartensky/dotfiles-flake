@@ -3,7 +3,8 @@
 log() { echo -e "\n\033[1m${@}\033[0m"; }
 
 log Checking root
-whoami | grep root || `log You must be root && exit 1`
+mustberoot() { log You must be root && exit 1 }
+whoami | grep root || mustberoot
 
 log Checking connectivity
 curl -s google.com > /dev/null || exit 1

@@ -103,7 +103,6 @@ zpool create \
     -O normalization=formD \
     -O relatime=on \
     -O xattr=sa \
-    # -O mountpoint=/boot \
     -m /boot \
     -R "${MNT}" \
     bpool \

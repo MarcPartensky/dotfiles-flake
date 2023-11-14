@@ -85,7 +85,7 @@ partition_disk () {
 }
 
 for i in $DISK; do
-   partition_disk $i
+   partition_disk $i || exit 1
 done
 
 log disk $DISK

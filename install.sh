@@ -15,6 +15,9 @@ curl -s google.com > /dev/null || exit 1
 log Loading zfs module first
 modprobe zfs || exit 1
 
+log Installing packages
+nix-env -f '<nixpkgs>' -iA git jq parted fzf
+
 echo ""
 lsblk
 echo ""
@@ -57,10 +60,6 @@ echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 
 
 log Installing programs needed for system installation
-# ---
-if ! command -v git; then nix-env -f '<nixpkgs>' -iA git; fi
-if ! command -v jq;  then nix-env -f '<nixpkgs>' -iA jq; fi
-if ! command -v partprobe;  then nix-env -f '<nixpkgs>' -iA parted; fi
 
 
 log Partition the disks
@@ -232,7 +231,7 @@ sed -i "s|\"kernelModules_placeholder\"|${kernelModules}|g" \
 
 log Setting root password
 # ---
-rootPwd=$(mkpasswd2 -m SHA-512)
+rootPwd=$(mkpasswd -m SHA-512)
 sed -i \
 "s|rootHash_placeholder|${rootPwd}|" \
 "${MNT}"/etc/nixos/configuration.nix

@@ -12,7 +12,7 @@
   boot.kernelParams = [ ];
   networking.hostId = "nixos";
   # read changeHostName.txt file.
-  networking.hostName = "laptop";
+  networking.hostName = "nixos";
   time.timeZone = "Europe/Paris";
 
   # import preconfigured profiles

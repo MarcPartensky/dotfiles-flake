@@ -10,7 +10,7 @@
   };
   boot.initrd.availableKernelModules = [ "kernelModules_placeholder" ];
   boot.kernelParams = [ ];
-  networking.hostId = "nixos";
+  networking.hostId = "abcd1234";
   # read changeHostName.txt file.
   networking.hostName = "nixos";
   time.timeZone = "Europe/Paris";

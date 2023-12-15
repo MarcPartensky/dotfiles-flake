@@ -1,0 +1,39 @@
+How to set hostname for a host.
+
+You need to change the host name in three different places.
+
+Place 1.
+
+./flake.nix
+
+Change
+
+    exampleHost = mkHost "exampleHost" "x86_64-linux";
+
+to
+
+    myHost = mkHost "myHost" "x86_64-linux";
+
+Place 2.
+
+Move directory
+
+    ./hosts/exampleHost
+
+to
+
+    ./hosts/myHost
+
+Place 3.
+
+./hosts/exampleHost/default.nix
+
+Change
+
+  networking.hostName = "exampleHost";
+
+to
+
+  networking.hostName = "myHost";
+
+End.

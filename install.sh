@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 log() { echo -e "\n\033[1m${@}\033[0m"; }
 

@@ -108,7 +108,7 @@ createbpool="zpool create \
     -R $MNT \
     bpool \
     `for i in $DISK; do
-       printf '%s ' ${i}3
+       printf '%s ' ${i}p3
      done`"
 echo $createbpool
 eval $createbpool
@@ -174,9 +174,9 @@ zfs snapshot rpool/nixos/empty@start
 log Formatting and mounting ESP
 # ---
 for i in ${DISK}; do
- mkfs.vfat -n EFI "${i}"4
- mkdir -p "${MNT}"/boot/efis/"${i##*/}"4
- mount -t vfat -o iocharset=iso8859-1 "${i}"4 "${MNT}"/boot/efis/"${i##*/}"4
+ mkfs.vfat -n EFI "${i}"p4
+ mkdir -p "${MNT}"/boot/efis/"${i##*/}"p4
+ mount -t vfat -o iocharset=iso8859-1 "${i}"p4 "${MNT}"/boot/efis/"${i##*/}"p4
 done
 
 
@@ -257,9 +257,9 @@ nixos-install \
 log Setuping encrypted swap. This is useful if the available memory is small
 # ---
 for i in ${DISK}; do
-   cryptsetup open --type plain --key-file /dev/random "${i}"1 "${i##*/}"1
-   mkswap /dev/mapper/"${i##*/}"1
-   swapon /dev/mapper/"${i##*/}"1
+   cryptsetup open --type plain --key-file /dev/random "${i}"p1 "${i##*/}"p1
+   mkswap /dev/mapper/"${i##*/}"p1
+   swapon /dev/mapper/"${i##*/}"p1
 done
 
 log Unmounting filesystems

@@ -100,10 +100,10 @@ in {
     {
       zfs-root.fileSystems = {
         efiSystemPartitions =
-          (map (diskName: diskName + cfg.partitionScheme.efiBoot)
+          (map (diskName: diskName + "p" + cfg.partitionScheme.efiBoot)
             cfg.bootDevices);
         swapPartitions =
-          (map (diskName: diskName + cfg.partitionScheme.swap) cfg.bootDevices);
+          (map (diskName: diskName + "p" + cfg.partitionScheme.swap) cfg.bootDevices);
       };
       boot = {
         supportedFilesystems = [ "zfs" ];

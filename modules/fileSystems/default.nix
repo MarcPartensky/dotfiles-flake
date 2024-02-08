@@ -41,7 +41,7 @@ in {
     };
   }) cfg.bindmounts ++ map (esp: {
     "/boot/efis/${esp}" = {
-      device = "${config.zfs-root.boot.devNodes}${esp}";
+      device = "${config.zfs-root.boot.devNodes}p${esp}";
       fsType = "vfat";
       options = [
         "x-systemd.idle-timeout=1min"

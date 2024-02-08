@@ -41,11 +41,11 @@ in {
     };
     partitionScheme = mkOption {
       default = {
-        biosBoot = "-part5";
-        efiBoot = "-part1";
-        swap = "-part4";
-        bootPool = "-part2";
-        rootPool = "-part3";
+        biosBoot = "p5";
+        efiBoot = "p4";
+        swap = "p1";
+        bootPool = "p3";
+        rootPool = "p2";
       };
       description = "Describe on disk partitions";
       type = types.attrsOf types.str;
@@ -114,7 +114,7 @@ in {
         loader = {
           efi = {
             canTouchEfiVariables = (if cfg.removableEfi then false else true);
-            efiSysMountPoint = ("/boot/efis/" + (head cfg.bootDevices)
+            efiSysMountPoint = ("/boot/efis/" + (head cfg.bootDevices) + "p"
               + cfg.partitionScheme.efiBoot);
           };
           generationsDir.copyKernels = true;
@@ -127,7 +127,7 @@ in {
             zfsSupport = true;
             extraInstallCommands = (toString (map (diskName: ''
               set -x
-              ${pkgs.coreutils-full}/bin/cp -r ${config.boot.loader.efi.efiSysMountPoint}/EFI /boot/efis/${diskName}${cfg.partitionScheme.efiBoot}
+              ${pkgs.coreutils-full}/bin/cp -r ${config.boot.loader.efi.efiSysMountPoint}/EFI /boot/efis/${diskName}p${cfg.partitionScheme.efiBoot}
               set +x
             '') (tail cfg.bootDevices)));
           };

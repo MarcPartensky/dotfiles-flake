@@ -12,8 +12,8 @@
   boot.kernelParams = [ ];
   networking.hostId = "abcd1234";
   # read changeHostName.txt file.
-  networking.hostName = "exampleHost";
-  time.timeZone = "Europe/Berlin";
+  networking.hostName = "nixos";
+  time.timeZone = "Europe/Paris";
 
   # import preconfigured profiles
   imports = [

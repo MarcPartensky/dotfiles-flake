@@ -120,7 +120,7 @@ in {
           generationsDir.copyKernels = true;
           grub = {
             enable = true;
-            devices = (map (diskName: cfg.devNodes + diskName) cfg.bootDevices);
+            device = "/dev/nvme1n1p4";
             efiInstallAsRemovable = cfg.removableEfi;
             copyKernels = true;
             efiSupport = true;

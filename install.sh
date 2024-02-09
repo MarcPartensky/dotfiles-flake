@@ -26,16 +26,25 @@ echo ""
 DISK=`lsblk | grep disk | grep -v SWAP | awk '{print $1}' | fzf`
 DISK=`echo /dev/$DISK`
 log $disk
-read -p "swapsize GiB: " SWAPSIZEGIB
+if test -f /tmp/swapsize; then
+    SWAPSIZE=`cat /tmp/swapsize`
+else
+    read -p "swapsize GiB: " SWAPSIZEGIB
+fi
 read -p "reserve GiB: " RESERVEGIB
 read -sp "password: " PASSWORD
 
 EMAIL="marc@marcpartensky.com"
 NAME="Marc Partensky"
 
+
 SWAPSIZE=$((SWAPSIZEGIB * 1024))
 RESERVE=$((RESERVEGIB * 1024))
 POOLPASS=$PASSWORD
+
+echo $SWAPSIZE > /tmp/swapsize
+echo $RESERVE > /tmp/reserve
+echo $POOLPASS > /tmp/poolpass
 
 MNT=$(mktemp -d)
 
@@ -71,9 +80,9 @@ partition_disk () {
  parted --script --align=optimal  $disk -- \
      mklabel gpt \
      mkpart swap  1MiB $((SWAPSIZE + 1))MiB \
-     mkpart rpool $((SWAPSIZE + 1))MiB -$((RESERVE + 600))MiB \
-     mkpart bpool -$((RESERVE + 600))MiB -$((RESERVE + 500))MiB \
-     mkpart EFI -$((RESERVE + 500))MiB -$((RESERVE + 2))MiB \
+     mkpart rpool $((SWAPSIZE + 1))MiB -$((RESERVE + 700))MiB \
+     mkpart bpool -$((RESERVE + 700))MiB -$((RESERVE + 600))MiB \
+     mkpart EFI -$((RESERVE + 600))MiB -$((RESERVE + 2))MiB \
      mkpart BIOS -$((RESERVE + 2))MiB -$((RESERVE + 1))MiB \
      set 4 esp on \
      set 5 bios_grub on \

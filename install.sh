@@ -73,9 +73,9 @@ partition_disk () {
  parted --script --align=optimal  $disk -- \
      mklabel gpt \
      mkpart swap  1MiB $((SWAPSIZE + 1))MiB \
-     mkpart rpool $((SWAPSIZE + 1))MiB -$((RESERVE + 400))MiB \
-     mkpart bpool -$((RESERVE + 400))MiB -$((RESERVE + 300))MiB \
-     mkpart EFI -$((RESERVE + 300))MiB -$((RESERVE + 2))MiB \
+     mkpart rpool $((SWAPSIZE + 1))MiB -$((RESERVE + 500))MiB \
+     mkpart bpool -$((RESERVE + 500))MiB -$((RESERVE + 400))MiB \
+     mkpart EFI -$((RESERVE + 400))MiB -$((RESERVE + 2))MiB \
      mkpart BIOS -$((RESERVE + 2))MiB -$((RESERVE + 1))MiB \
      set 4 esp on \
      set 5 bios_grub on \

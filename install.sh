@@ -28,7 +28,7 @@ DISK=`echo /dev/$DISK`
 log $disk
 test -f /tmp/swapsize && SWAPSIZE=`cat /tmp/swapsize` || read -p "swapsize GiB: " SWAPSIZEGIB
 test -f /tmp/reserve && RESERVE=`cat /tmp/reserve` || read -p "reserve GiB: " RESERVEGIB
-test -f /tmp/poolpass && POOLPASSS=`cat /tmp/poolpass` || read -sp "password: " PASSWORD
+test -f /tmp/poolpass && POOLPASS=`cat /tmp/poolpass` || read -sp "password: " PASSWORD
 
 EMAIL="marc@marcpartensky.com"
 NAME="Marc Partensky"
@@ -41,6 +41,7 @@ POOLPASS=$PASSWORD
 echo $SWAPSIZE > /tmp/swapsize
 echo $RESERVE > /tmp/reserve
 echo $POOLPASS > /tmp/poolpass
+
 
 MNT=$(mktemp -d)
 

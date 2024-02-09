@@ -55,7 +55,7 @@
         };
     in {
       nixosConfigurations = {
-        exampleHost = mkHost "nixos" "x86_64-linux";
+        nixos = mkHost "nixos" "x86_64-linux";
       };
     };
 }

@@ -33,9 +33,9 @@ test -f /tmp/poolpass && POOLPASS=`cat /tmp/poolpass` || read -sp "password: " P
 EMAIL="marc@marcpartensky.com"
 NAME="Marc Partensky"
 
-echo $SWAPSIZEGIB > /tmp/swapsizegib
-echo $RESERVEGIB > /tmp/reservegib
-echo $POOLPASS > /tmp/poolpass
+echo $SWAPSIZEGIB | tee /tmp/swapsizegib
+echo $RESERVEGIB | tee /tmp/reservegib
+echo $POOLPASS | tee /tmp/poolpass
 
 SWAPSIZE=$((SWAPSIZEGIB * 1024))
 RESERVE=$((RESERVEGIB * 1024))

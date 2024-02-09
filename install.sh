@@ -28,9 +28,9 @@ if [ -z $DISK ]; then
     export DISK=`echo /dev/$DISK`
 fi
 log $disk
-[ -z SWAPSIZE ] || read -p "swapsize GiB: " SWAPSIZEGIB
-[ -z RESERVE ] || read -p "reserve GiB: " RESERVEGIB
-[ -z POOLPASS ] || read -sp "password: " PASSWORD
+[ -z SWAPSIZE ] && read -p "swapsize GiB: " SWAPSIZEGIB
+[ -z RESERVE ] && read -p "reserve GiB: " RESERVEGIB
+[ -z POOLPASS ] && read -sp "password: " PASSWORD
 
 EMAIL="marc@marcpartensky.com"
 NAME="Marc Partensky"

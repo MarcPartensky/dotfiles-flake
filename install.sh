@@ -26,22 +26,19 @@ echo ""
 DISK=`lsblk | grep disk | grep -v SWAP | awk '{print $1}' | fzf`
 DISK=`echo /dev/$DISK`
 log $disk
-test -f /tmp/swapsize && SWAPSIZE=`cat /tmp/swapsize` || read -p "swapsize GiB: " SWAPSIZEGIB
-test -f /tmp/reserve && RESERVE=`cat /tmp/reserve` || read -p "reserve GiB: " RESERVEGIB
-test -f /tmp/poolpass && POOLPASS=`cat /tmp/poolpass` || read -sp "password: " PASSWORD
+test -f /tmp/swapsizegib && SWAPSIZE=`cat /tmp/swapsizegib` || read -p "swapsize GiB: " SWAPSIZEGIB
+test -f /tmp/reservegib && RESERVE=`cat /tmp/reservegib` || read -p "reserve GiB: " RESERVEGIB
+test -f /tmp/poolpass && POOLPASS=`cat /tmp/poolpass` || read -sp "password: " POOLPASS
 
 EMAIL="marc@marcpartensky.com"
 NAME="Marc Partensky"
 
+echo $SWAPSIZEGIB > /tmp/swapsizegib
+echo $RESERVEGIB > /tmp/reservegib
+echo $POOLPASS > /tmp/poolpass
 
 SWAPSIZE=$((SWAPSIZEGIB * 1024))
 RESERVE=$((RESERVEGIB * 1024))
-POOLPASS=$PASSWORD
-
-echo $SWAPSIZE > /tmp/swapsize
-echo $RESERVE > /tmp/reserve
-echo $POOLPASS > /tmp/poolpass
-
 
 MNT=$(mktemp -d)
 

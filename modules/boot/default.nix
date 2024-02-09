@@ -114,13 +114,12 @@ in {
         loader = {
           efi = {
             canTouchEfiVariables = (if cfg.removableEfi then false else true);
-            efiSysMountPoint = ("/boot/efis/" + (head cfg.bootDevices) + "p"
-              + cfg.partitionScheme.efiBoot);
+            efiSysMountPoint = "/boot/efis/nvme1n1p4";
           };
           generationsDir.copyKernels = true;
           grub = {
             enable = true;
-            device = "/dev/nvme1n1p4";
+            device = "/dev/nvme1n1p5";
             efiInstallAsRemovable = cfg.removableEfi;
             copyKernels = true;
             efiSupport = true;

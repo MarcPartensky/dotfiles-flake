@@ -26,8 +26,8 @@ echo ""
 DISK=`lsblk | grep disk | grep -v SWAP | awk '{print $1}' | fzf`
 DISK=`echo /dev/$DISK`
 log $disk
-test -f /tmp/swapsizegib && SWAPSIZE=`cat /tmp/swapsizegib` || read -p "swapsize GiB: " SWAPSIZEGIB
-test -f /tmp/reservegib && RESERVE=`cat /tmp/reservegib` || read -p "reserve GiB: " RESERVEGIB
+test -f /tmp/swapsizegib && SWAPSIZEGIB=`cat /tmp/swapsizegib` || read -p "swapsize GiB: " SWAPSIZEGIB
+test -f /tmp/reservegib && RESERVEGIB=`cat /tmp/reservegib` || read -p "reserve GiB: " RESERVEGIB
 test -f /tmp/poolpass && POOLPASS=`cat /tmp/poolpass` || read -sp "password: " POOLPASS
 
 EMAIL="marc@marcpartensky.com"

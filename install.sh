@@ -23,19 +23,21 @@ lsblk
 echo ""
 
 # read -p "disk: " DISK
-DISK=`lsblk | grep disk | grep -v SWAP | awk '{print $1}' | fzf`
-DISK=`echo /dev/$DISK`
+if [ -z $DISK ]; then
+    DISK=`lsblk | grep disk | grep -v SWAP | awk '{print $1}' | fzf`
+    export DISK=`echo /dev/$DISK`
+fi
 log $disk
-read -p "swapsize GiB: " SWAPSIZEGIB
-read -p "reserve GiB: " RESERVEGIB
-read -sp "password: " POOLPASS
+[ -z SWAPSIZE ] || read -p "swapsize GiB: " SWAPSIZEGIB
+[ -z RESERVE ] || read -p "reserve GiB: " RESERVEGIB
+[ -z POOLPASS ] || read -sp "password: " PASSWORD
 
 EMAIL="marc@marcpartensky.com"
 NAME="Marc Partensky"
 
-RESERVE=$((RESERVEGIB * 1024))
-SWAPSIZE=$((SWAPSIZEGIB * 1024))
-
+export SWAPSIZE=$((SWAPSIZEGIB * 1024))
+export RESERVE=$((RESERVEGIB * 1024))
+export POOLPASS=PASSWORD
 
 MNT=$(mktemp -d)
 

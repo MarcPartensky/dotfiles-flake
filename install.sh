@@ -99,25 +99,21 @@ zpool create \
 
 log 5. Create root system container:
 zfs create -o canmount=noauto -o mountpoint=legacy rpool/root
-pause
 
 log Create system datasets, manage mountpoints with mountpoint=legacy
 zfs create -o mountpoint=legacy rpool/home
 mount -o X-mount.mkdir -t zfs rpool/root "${MNT}"
 mount -o X-mount.mkdir -t zfs rpool/home "${MNT}"/home
-pause
 
 log 6. Format and mount ESP. Only one of them is used as /boot, you need to set up mirroring afterwards
 for i in ${DISK}; do
  mkfs.vfat -n EFI "${i}"p1
 done
-pause
 
 for i in ${DISK}; do
  mount -t vfat -o fmask=0077,dmask=0077,iocharset=iso8859-1,X-mount.mkdir "${i}"p1 "${MNT}"/boot
  break
 done
-pause
 
 log System configuration
 log 1. Generate system configuration:

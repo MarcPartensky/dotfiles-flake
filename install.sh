@@ -54,7 +54,7 @@ partition_disk () {
  parted --script --align=optimal  "${disk}" -- \
  mklabel gpt \
  mkpart EFI 1MiB 4GiB \
- mkpart rpool 4GiB -$((SWAPSIZE + RESERVE))MiB \
+ mkpart rpool 4096Mib -$((SWAPSIZE + RESERVE))MiB \
  mkpart swap  -$((SWAPSIZE + RESERVE))MiB -"${RESERVE}"MiB \
  set 1 esp on \
 

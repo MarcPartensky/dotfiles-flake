@@ -67,16 +67,16 @@ done
 
 log 2. Setup temporary encrypted swap for this installation only. This is useful if the available memory is small:
 for i in ${DISK}; do
-   cryptsetup open --type plain --key-file /dev/random "${i}"-part3 "${i##*/}"-part3
-   mkswap /dev/mapper/"${i##*/}"-part3
-   swapon /dev/mapper/"${i##*/}"-part3
+   cryptsetup open --type plain --key-file /dev/random "${i}"p3 "${i##*/}"p3
+   mkswap /dev/mapper/"${i##*/}"p3
+   swapon /dev/mapper/"${i##*/}"p3
 done
 
 log 3. LUKS only: Setup encrypted LUKS container for root pool:
 for i in ${DISK}; do
    # see PASSPHRASE PROCESSING section in cryptsetup(8)
-   printf "YOUR_PASSWD" | cryptsetup luksFormat --type luks2 "${i}"-part2 -
-   printf "YOUR_PASSWD" | cryptsetup luksOpen "${i}"-part2 luks-rpool-"${i##*/}"-part2 -
+   printf "YOUR_PASSWD" | cryptsetup luksFormat --type luks2 "${i}"p2 -
+   printf "YOUR_PASSWD" | cryptsetup luksOpen "${i}"p2 luks-rpool-"${i##*/}"p2 -
 done
 
 log 4. Create encrypted root pool
@@ -95,7 +95,7 @@ zpool create \
     rpool \
     mirror \
    $(for i in ${DISK}; do
-      printf '/dev/mapper/luks-rpool-%s ' "${i##*/}-part2";
+      printf '/dev/mapper/luks-rpool-%s ' "${i##*/}p2";
      done)
 
 log 5. Create root system container:
@@ -110,12 +110,12 @@ pause
 
 log 6. Format and mount ESP. Only one of them is used as /boot, you need to set up mirroring afterwards
 for i in ${DISK}; do
- mkfs.vfat -n EFI "${i}"-part1
+ mkfs.vfat -n EFI "${i}"p1
 done
 pause
 
 for i in ${DISK}; do
- mount -t vfat -o fmask=0077,dmask=0077,iocharset=iso8859-1,X-mount.mkdir "${i}"-part1 "${MNT}"/boot
+ mount -t vfat -o fmask=0077,dmask=0077,iocharset=iso8859-1,X-mount.mkdir "${i}"p1 "${MNT}"/boot
  break
 done
 pause
@@ -136,7 +136,7 @@ tee <<EOF
   boot.initrd.luks.devices = {
 EOF
 
-for i in ${DISK}; do echo \"luks-rpool-"${i##*/}-part2"\".device = \"${i}-part2\"\; ; done
+for i in ${DISK}; do echo \"luks-rpool-"${i##*/}p2"\".device = \"${i}p2\"\; ; done
 
 tee <<EOF
 };

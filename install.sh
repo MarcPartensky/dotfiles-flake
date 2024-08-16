@@ -81,6 +81,23 @@ done
 
 log 4. Create encrypted root pool
 # shellcheck disable=SC2046
+# zpool create \
+#     -o ashift=12 \
+#     -o autotrim=on \
+#     -R "${MNT}" \
+#     -O acltype=posixacl \
+#     -O canmount=off \
+#     -O dnodesize=auto \
+#     -O normalization=formD \
+#     -O relatime=on \
+#     -O xattr=sa \
+#     -O mountpoint=none \
+#     rpool \
+#    $(for i in ${DISK}; do
+#       printf '/dev/mapper/luks-rpool-%s ' "${i##*/}p2";
+#      done)
+
+# shellcheck disable=SC2046
 zpool create \
     -o ashift=12 \
     -o autotrim=on \
@@ -94,7 +111,7 @@ zpool create \
     -O mountpoint=none \
     rpool \
    $(for i in ${DISK}; do
-      printf '/dev/mapper/luks-rpool-%s ' "${i##*/}p2";
+      printf '%s ' "${i}-part2";
      done)
 
 log 5. Create root system container:

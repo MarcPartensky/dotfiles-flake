@@ -93,7 +93,6 @@ zpool create \
     -O xattr=sa \
     -O mountpoint=none \
     rpool \
-    mirror \
    $(for i in ${DISK}; do
       printf '/dev/mapper/luks-rpool-%s ' "${i##*/}p2";
      done)

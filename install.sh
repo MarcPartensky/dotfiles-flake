@@ -124,11 +124,9 @@ log 1. Generate system configuration:
 nixos-generate-config --root "${MNT}"
 
 
-log 2. Edit system configuration:
+log 2. Edit system configuration: 
+log 3. To set networking.hostId: networking.hostId = "abcd1234";
 nano "${MNT}"/etc/nixos/hardware-configuration.nix
-
-log 3. Set networking.hostId:
-networking.hostId = "abcd1234";
 
 log 4. If using LUKS, add the output from following command to system configuration
 tee <<EOF

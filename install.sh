@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-log() { echo -e "\n\033[1m${@}\033[0m"; }
+pause() {
+ read -s -n 1 -p "Press any key to continue . . ."
+ echo ""
+}
+ 
+log() { echo -e "\n\033[1m${@}\033[0m"; pause; }
 
 log Checking root
 mustberoot() {
@@ -39,7 +44,7 @@ SWAPSIZE=$((SWAPSIZEGIB * 1024))
 
 MNT=$(mktemp -d)
 
-# 1. Partition the disks.
+log 1. Partition the disks.
 # Note: you must clear all existing partition tables and data structures from target disks.
 # For flash-based storage, this can be done by the blkdiscard command below:
 partition_disk () {
@@ -60,21 +65,21 @@ for i in ${DISK}; do
    partition_disk "${i}"
 done
 
-# 2. Setup temporary encrypted swap for this installation only. This is useful if the available memory is small:
+log 2. Setup temporary encrypted swap for this installation only. This is useful if the available memory is small:
 for i in ${DISK}; do
    cryptsetup open --type plain --key-file /dev/random "${i}"-part3 "${i##*/}"-part3
    mkswap /dev/mapper/"${i##*/}"-part3
    swapon /dev/mapper/"${i##*/}"-part3
 done
 
-# 3. LUKS only: Setup encrypted LUKS container for root pool:
+log 3. LUKS only: Setup encrypted LUKS container for root pool:
 for i in ${DISK}; do
    # see PASSPHRASE PROCESSING section in cryptsetup(8)
    printf "YOUR_PASSWD" | cryptsetup luksFormat --type luks2 "${i}"-part2 -
    printf "YOUR_PASSWD" | cryptsetup luksOpen "${i}"-part2 luks-rpool-"${i##*/}"-part2 -
 done
 
-# 4. Create encrypted root pool
+log 4. Create encrypted root pool
 # shellcheck disable=SC2046
 zpool create \
     -o ashift=12 \
@@ -93,35 +98,40 @@ zpool create \
       printf '/dev/mapper/luks-rpool-%s ' "${i##*/}-part2";
      done)
 
-# 5. Create root system container:
+log 5. Create root system container:
 zfs create -o canmount=noauto -o mountpoint=legacy rpool/root
+pause
 
-# Create system datasets, manage mountpoints with mountpoint=legacy
+log Create system datasets, manage mountpoints with mountpoint=legacy
 zfs create -o mountpoint=legacy rpool/home
 mount -o X-mount.mkdir -t zfs rpool/root "${MNT}"
 mount -o X-mount.mkdir -t zfs rpool/home "${MNT}"/home
+pause
 
-# 6. Format and mount ESP. Only one of them is used as /boot, you need to set up mirroring afterwards
+log 6. Format and mount ESP. Only one of them is used as /boot, you need to set up mirroring afterwards
 for i in ${DISK}; do
  mkfs.vfat -n EFI "${i}"-part1
 done
+pause
 
 for i in ${DISK}; do
  mount -t vfat -o fmask=0077,dmask=0077,iocharset=iso8859-1,X-mount.mkdir "${i}"-part1 "${MNT}"/boot
  break
 done
+pause
 
-## System configuration
-# 1. Generate system configuration:
+log System configuration
+log 1. Generate system configuration:
 nixos-generate-config --root "${MNT}"
 
-# 2. Edit system configuration:
+
+log 2. Edit system configuration:
 nano "${MNT}"/etc/nixos/hardware-configuration.nix
 
-# 3. Set networking.hostId:
+log 3. Set networking.hostId:
 networking.hostId = "abcd1234";
 
-# 4. If using LUKS, add the output from following command to system configuration
+log 4. If using LUKS, add the output from following command to system configuration
 tee <<EOF
   boot.initrd.luks.devices = {
 EOF
@@ -132,15 +142,15 @@ tee <<EOF
 };
 EOF
 
-# 5. Install system and apply configuration
+log 5. Install system and apply configuration
 nixos-install  --root "${MNT}"
 
-# 6. Unmount filesystems
+log 6. Unmount filesystems
 cd /
 umount -Rl "${MNT}"
 zpool export -a
 
-# 7. Reboot
+log 7. Reboot
 reboot
 
 # 8. Set up networking, desktop and swap.

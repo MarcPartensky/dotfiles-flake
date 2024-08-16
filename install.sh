@@ -111,7 +111,7 @@ zpool create \
     -O mountpoint=none \
     rpool \
    $(for i in ${DISK}; do
-      printf '%s ' "${i}-part2";
+      printf '%s ' "${i}p2";
      done)
 
 log 5. Create root system container:

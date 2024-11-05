@@ -183,7 +183,7 @@ sed -i "s|# networking.hostName = \"abcd1234\"|networking.hostName = \"nixos\"|g
   "${MNT}"/etc/nixos/configuration.nix
 
 hostId=`head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n'`
-echo `networking.hostId = $hostId;` >> "${MNT}"/etc/nixos/configuration.nix
+echo "networking.hostId = $hostId;" >> "${MNT}"/etc/nixos/configuration.nix
 
 # log If using LUKS, add the output from following command to system configuration
 # tee <<EOF

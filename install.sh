@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 log() { echo -e "\n\033[1m${@}\033[0m"; }
-pause() { read -p "Press any key to continue... " -n1 -s }
+pause() { read -p "Press any key to continue... " -n1 -s
+}
 
 log Checking root
 mustberoot() {
@@ -178,6 +179,9 @@ sed -i "s|\"abcd1234\"|\"nixos\"|g" \
 sed -i "s|\"abcd1234\"|\"nixos\"|g" \
   "${MNT}"/etc/nixos/configuration.nix
 
+sed -i "s|\# networking.hostName = \"abcd1234\"|networking.hostName = \"nixos\"|g" \
+  "${MNT}"/etc/nixos/configuration.nix
+
 # log If using LUKS, add the output from following command to system configuration
 # tee <<EOF
 #   boot.initrd.luks.devices = {
@@ -188,6 +192,8 @@ sed -i "s|\"abcd1234\"|\"nixos\"|g" \
 # EOF
 pause
 vim "${MNT}"/etc/nixos/configuration.nix
+
+cat "${MNT}"/etc/nixos/configuration.nix
 
 log Install system and apply configuration
 nixos-install  --root "${MNT}" --show-trace

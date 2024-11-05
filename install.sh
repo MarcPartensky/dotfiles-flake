@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
 log() { echo -e "\n\033[1m${@}\033[0m"; }
-pause() {
-    read -n 1 -s k
-}
+pause() { read -p "Press any key to continue... " -n1 -s }
 
 log Checking root
 mustberoot() {

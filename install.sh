@@ -70,16 +70,27 @@ partition_disk () {
  local disk=$1
  blkdiscard -f $disk || true
 
- parted --script --align=optimal  $disk -- \
+ # parted --script --align=optimal  $disk -- \
+ #     mklabel gpt \
+ #     mkpart swap  1MiB $((SWAPSIZE + 1))MiB \
+ #     mkpart rpool $((SWAPSIZE + 1))MiB -$((RESERVE + 200))MiB \
+ #     mkpart bpool -$((RESERVE + 200))MiB -$((RESERVE + 50))MiB \
+ #     mkpart EFI -$((RESERVE + 50))MiB -$((RESERVE + 2))MiB \
+ #     mkpart BIOS -$((RESERVE + 2))MiB -$((RESERVE + 1))MiB \
+ #     set 4 esp on \
+ #     set 5 bios_grub on \
+ #     set 5 legacy_boot on
+
+ parted --script --align=optimal $disk -- \
      mklabel gpt \
-     mkpart swap  1MiB $((SWAPSIZE + 1))MiB \
-     mkpart rpool $((SWAPSIZE + 1))MiB -$((RESERVE + 200))MiB \
-     mkpart bpool -$((RESERVE + 200))MiB -$((RESERVE + 50))MiB \
-     mkpart EFI -$((RESERVE + 50))MiB -$((RESERVE + 2))MiB \
-     mkpart BIOS -$((RESERVE + 2))MiB -$((RESERVE + 1))MiB \
-     set 4 esp on \
-     set 5 bios_grub on \
-     set 5 legacy_boot on
+     mkpart EFI 1MiB 3MiB \
+     mkpart BIOS 3MiB 4MiB \
+     mkpart swap 4MiB $((SWAPSIZE + 4))MiB \
+     mkpart rpool $((SWAPSIZE + 4))MiB -$((RESERVE + 150))MiB \
+     mkpart bpool -$((RESERVE + 150))MiB -$((RESERVE + 1))MiB \
+     set 1 esp on \
+     set 2 bios_grub on \
+     set 2 legacy_boot on
 
  partprobe $disk
  udevadm settle
@@ -110,14 +121,14 @@ createbpool="zpool create \
     -R $MNT \
     bpool \
     `for i in $DISK; do
-       printf '%s ' ${i}p3
+       printf '%s ' ${i}p5
      done`"
 echo $createbpool
 eval $createbpool
 # for i in ${DISK}; do
-#    cryptsetup open --type plain --key-file /dev/random "${i}"p3 "${i##*/}"p3
-#    mkswap /dev/mapper/"${i##*/}"p3
-#    swapon /dev/mapper/"${i##*/}"p3
+#    cryptsetup open --type plain --key-file /dev/random "${i}"p5 "${i##*/}"p5
+#    mkswap /dev/mapper/"${i##*/}"p5
+#    swapon /dev/mapper/"${i##*/}"p5
 # done
 
 log Creating root pool
@@ -140,7 +151,7 @@ echo $POOLPASS | zpool create \
     -m / \
     rpool \
    $(for i in $DISK; do
-      printf '%s ' "${i}p2";
+      printf '%s ' "${i}p4";
      done)
 
 

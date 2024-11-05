@@ -174,13 +174,16 @@ log Generate system configuration:
 nixos-generate-config --root "${MNT}"
 
 log Edit system configuration with new host
-sed -i "s|\"abcd1234\"|\"nixos\"|g" \
-  "${MNT}"/etc/nixos/hardware-configuration.nix
-sed -i "s|\"abcd1234\"|\"nixos\"|g" \
+# sed -i "s|\"abcd1234\"|\"nixos\"|g" \
+#   "${MNT}"/etc/nixos/hardware-configuration.nix
+# sed -i "s|\"abcd1234\"|\"nixos\"|g" \
+#   "${MNT}"/etc/nixos/configuration.nix
+
+sed -i "s|# networking.hostName = \"abcd1234\"|networking.hostName = \"nixos\"|g" \
   "${MNT}"/etc/nixos/configuration.nix
 
-sed -i "s|\# networking.hostName = \"abcd1234\"|networking.hostName = \"nixos\"|g" \
-  "${MNT}"/etc/nixos/configuration.nix
+hostId=`head -c 4 /dev/urandom | od -An -tx1 | tr -d ' \n'`
+echo `networking.hostId = $hostId;` >> "${MNT}"/etc/nixos/configuration.nix
 
 # log If using LUKS, add the output from following command to system configuration
 # tee <<EOF

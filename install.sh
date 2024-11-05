@@ -112,7 +112,11 @@ createbpool="zpool create \
      done`"
 echo $createbpool
 eval $createbpool
-
+# for i in ${DISK}; do
+#    cryptsetup open --type plain --key-file /dev/random "${i}"p3 "${i##*/}"p3
+#    mkswap /dev/mapper/"${i##*/}"p3
+#    swapon /dev/mapper/"${i##*/}"p3
+# done
 
 log Creating root pool
 # ---
@@ -148,124 +152,48 @@ echo $POOLPASS | zfs create \
     -o keyformat=passphrase \
     rpool/nixos
 
+log Create root system container
+zfs create -o canmount=noauto -o mountpoint=legacy rpool/root
+zfs create -o mountpoint=legacy rpool/home
+mount -o X-mount.mkdir -t zfs rpool/root "${MNT}"
+mount -o X-mount.mkdir -t zfs rpool/home "${MNT}"/home
 
-log Creating system datasets, managing mountpoints with mountpoint=legacy
-# ---
-zfs create -o mountpoint=legacy     rpool/nixos/root
-mount -t zfs rpool/nixos/root "${MNT}"/
-zfs create -o mountpoint=legacy rpool/nixos/home
-mkdir "${MNT}"/home
-mount -t zfs rpool/nixos/home "${MNT}"/home
-zfs create -o mountpoint=legacy  rpool/nixos/var
-zfs create -o mountpoint=legacy rpool/nixos/var/lib
-zfs create -o mountpoint=legacy rpool/nixos/var/log
-zfs create -o mountpoint=none bpool/nixos
-zfs create -o mountpoint=legacy bpool/nixos/root
-mkdir "${MNT}"/boot
-mount -t zfs bpool/nixos/root "${MNT}"/boot
-mkdir -p "${MNT}"/var/log
-mkdir -p "${MNT}"/var/lib
-mount -t zfs rpool/nixos/var/lib "${MNT}"/var/lib
-mount -t zfs rpool/nixos/var/log "${MNT}"/var/log
-zfs create -o mountpoint=legacy rpool/nixos/empty
-zfs snapshot rpool/nixos/empty@start
-
-
-log Formatting and mounting ESP
-# ---
+log Format and mount ESP. Only one of them is used as /boot, you need to set up mirroring afterwards
 for i in ${DISK}; do
- mkfs.vfat -n EFI "${i}"p4
- mkdir -p "${MNT}"/boot/efis/"${i##*/}"p4
- mount -t vfat -o iocharset=iso8859-1 "${i}"p4 "${MNT}"/boot/efis/"${i##*/}"p4
+    mkfs.vfat -n EFI "${i}"p1
 done
 
-
-log Cloning template flake configuration
-# ---
-mkdir -p "${MNT}"/etc
-git clone --depth 1 --branch custom \
-  https://github.com/marcpartensky/nixos-zfs-installer.git "${MNT}"/etc/nixos
-
-rm -rf "${MNT}"/etc/nixos/.git
-git -C "${MNT}"/etc/nixos/ init -b master
-git -C "${MNT}"/etc/nixos/ add "${MNT}"/etc/nixos/
-git -C "${MNT}"/etc/nixos config user.email $EMAIL
-git -C "${MNT}"/etc/nixos config user.name $NAME
-git -C "${MNT}"/etc/nixos commit -nasm 'initial commit'
-
-
-log Customizing configuration to your hardware
-# ---
 for i in ${DISK}; do
-  sed -i \
-  "s|/dev/disk/by-id/|${i%/*}/|" \
-  "${MNT}"/etc/nixos/hosts/nixos/default.nix
-  break
+    mount -t vfat -o fmask=0077,dmask=0077,iocharset=iso8859-1,X-mount.mkdir "${i}"p1 "${MNT}"/boot
+    break
 done
 
-diskNames=""
-for i in ${DISK}; do
-  diskNames="${diskNames} \"${i##*/}\""
-done
+log Generate system configuration:
+nixos-generate-config --root "${MNT}"
 
-sed -i "s|\"bootDevices_placeholder\"|${diskNames}|g" \
-  "${MNT}"/etc/nixos/hosts/nixos/default.nix
+log Edit system configuration with new host
+sed -i "s|\"abcd1234\"|\"nixos\"|g" \
+  "${MNT}"/etc/nixos/hardware-configuration.nix
 
-sed -i "s|\"abcd1234\"|\"$(head -c4 /dev/urandom | od -A none -t x4| sed 's| ||g' || true)\"|g" \
-  "${MNT}"/etc/nixos/hosts/nixos/default.nix
+log If using LUKS, add the output from following command to system configuration
+tee <<EOF
+  boot.initrd.luks.devices = {
+EOF
+for i in ${DISK}; do echo \"luks-rpool-"${i##*/}p2"\".device = \"${i}p2\"\; ; done
+tee <<EOF
+};
+EOF
 
-sed -i "s|\"x86_64-linux\"|\"$(uname -m || true)-linux\"|g" \
-  "${MNT}"/etc/nixos/flake.nix
+read -s "copy the previous before opening vim"
+vim "${MNT}"/etc/nixos/configuration.nix
 
-cp "$(command -v nixos-generate-config || true)" ./nixos-generate-config
+log Install system and apply configuration
+nixos-install  --root "${MNT}"
 
-chmod a+rwx ./nixos-generate-config
-
-# shellcheck disable=SC2016
-echo 'print STDOUT $initrdAvailableKernelModules' >> ./nixos-generate-config
-
-kernelModules="$(./nixos-generate-config --show-hardware-config --no-filesystems | tail -n1 || true)"
-
-sed -i "s|\"kernelModules_placeholder\"|${kernelModules}|g" \
-  "${MNT}"/etc/nixos/hosts/nixos/default.nix
-
-log Setting root password
-# ---
-rootPwd=$(echo $POOLPASS | mkpasswd -sm SHA-512)
-sed -i \
-"s|rootHash_placeholder|${rootPwd}|" \
-"${MNT}"/etc/nixos/configuration.nix
-
-
-log Commiting changes to local repo
-# ---
-git -C "${MNT}"/etc/nixos commit -asm 'initial installation'
-
-log Updating flake lock file to track latest system version
-# ---
-nix flake update --commit-lock-file \
-  "git+file://${MNT}/etc/nixos"
-
-log Installing system and apply configuration
-# ---
-nixos-install \
---root "${MNT}" \
---no-root-passwd \
---flake "git+file://${MNT}/etc/nixos#nixos"
-
-
-log Setuping encrypted swap. This is useful if the available memory is small
-# ---
-for i in ${DISK}; do
-   cryptsetup open --type plain --key-file /dev/random "${i}"p1 "${i##*/}"p1
-   mkswap /dev/mapper/"${i##*/}"p1
-   swapon /dev/mapper/"${i##*/}"p1
-done
-
-log Unmounting filesystems
-# ---
+log Unmount filesystems
+cd /
 umount -Rl "${MNT}"
 zpool export -a
 
-
-log The installation is done, enjoy
+log you should reboot
+# reboot

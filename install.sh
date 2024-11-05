@@ -174,21 +174,23 @@ nixos-generate-config --root "${MNT}"
 log Edit system configuration with new host
 sed -i "s|\"abcd1234\"|\"nixos\"|g" \
   "${MNT}"/etc/nixos/hardware-configuration.nix
+sed -i "s|\"abcd1234\"|\"nixos\"|g" \
+  "${MNT}"/etc/nixos/configuration.nix
 
-log If using LUKS, add the output from following command to system configuration
-tee <<EOF
-  boot.initrd.luks.devices = {
-EOF
-for i in ${DISK}; do echo \"luks-rpool-"${i##*/}p2"\".device = \"${i}p2\"\; ; done
-tee <<EOF
-};
-EOF
+# log If using LUKS, add the output from following command to system configuration
+# tee <<EOF
+#   boot.initrd.luks.devices = {
+# EOF
+# for i in ${DISK}; do echo \"luks-rpool-"${i##*/}p2"\".device = \"${i}p2\"\; ; done
+# tee <<EOF
+# };
+# EOF
 
 read -s "copy the previous before opening vim"
 vim "${MNT}"/etc/nixos/configuration.nix
 
 log Install system and apply configuration
-nixos-install  --root "${MNT}"
+nixos-install  --root "${MNT}" --show-trace
 
 log Unmount filesystems
 cd /

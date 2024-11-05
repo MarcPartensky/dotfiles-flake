@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 log() { echo -e "\n\033[1m${@}\033[0m"; }
+pause() {
+    echo "Space to continue"
+    while :; do read -n 1 -s k && [[ $k == " " ]] && break; done
+}
 
 log Checking root
 mustberoot() {
@@ -185,8 +189,7 @@ sed -i "s|\"abcd1234\"|\"nixos\"|g" \
 # tee <<EOF
 # };
 # EOF
-
-read -s "copy the previous before opening vim"
+pause
 vim "${MNT}"/etc/nixos/configuration.nix
 
 log Install system and apply configuration

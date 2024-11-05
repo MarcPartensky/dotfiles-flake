@@ -2,8 +2,7 @@
 
 log() { echo -e "\n\033[1m${@}\033[0m"; }
 pause() {
-    echo "Space to continue"
-    while true; do read -n 1 -s k; [[ $k == " " ]] && break; done
+    read -n 1 -s k
 }
 
 log Checking root
